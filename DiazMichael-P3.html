@@ -1,0 +1,177 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Bounce [Canvas]</title>
+  </head>
+<body>
+    <div>
+        <canvas id="canvas" width="700" height="300"></canvas>
+    </div>
+<img src="https://i.imgur.com/wOG4eRL.png" id="picture" style="display:none"/>
+<script type="text/javascript">
+var canvas,
+    context,
+    x = 400,
+    y = 300,
+    dx = 2,
+    dy = 4,
+	tx = 0;
+	tdx = 2.5;
+    width = 700,
+    height = 300; 
+	Lx=1;
+	px=20;
+	py=20;
+	pdx=2;
+	pdy=4;
+	var stopOne;
+	var stopTwo;
+	var timer;
+	ty=1;
+	tdy=1;
+
+function drawCircle(x,y,r) {
+  context.beginPath();
+  context.arc(x, y, r, 0, Math.PI*2, true);
+  context.fill();
+  Math.random();
+}
+
+function drawImage(px,py,src){
+  base_image = new Image();
+  base_image.src = 'https://i.imgur.com/wOG4eRL.png';
+  context.drawImage(base_image,px-50,py-40,100,100);
+}
+
+function drawImage2(px,py,src){
+  base_image = new Image();
+  base_image.src = 'http://www.thealmightyguru.com/Reviews/BionicCommando/Wiki/images/f/fb/EF-Gun-LaserGun.png';
+  context.drawImage(base_image,px-50,py-40,100,100);
+ 
+}
+
+function drawRect(x,y,w,h) {
+  context.beginPath();
+  context.rect(x,y,w,h);
+  context.closePath();
+  context.fill();
+}
+
+function drawText(tx) {
+  context.font='30px Helvetica';
+  context.strokeText('Welcome To My Animation', tx,250);
+  context.fillStyle = '#00FF00';
+  context.fillText('Welcome To My Animation' , tx,250);
+}
+
+function drawTriangle(ty){
+    context.strokeStyle = "red";
+    context.beginPath();
+    context.lineTo(218+tx, 25+ty);
+    context.lineTo(346+ty, 25+ty);
+    context.lineTo(283+ty, 136+ty);
+    context.closePath();
+    context.stroke();
+}
+function drawLine(Lx){
+	context.beginPath();
+	context.moveTo(Lx,15);
+	context.lineTo(Lx+25,15);
+	context.strokeStyle = '#FF0000';
+	context.stroke();
+
+}
+function start() {
+  canvas = document.getElementById("canvas");
+  context = canvas.getContext("2d");
+	stopOne = 0;
+	stopTwo = 1;
+  return setInterval(draw, 10);
+}
+function draw() {
+  context.clearRect(0, 0, width, height);
+  context.fillStyle = "black";
+  drawRect(0,200, 800, 700);
+	var myGradient = context.createLinearGradient(0, 200, 700, 300);
+	myGradient.addColorStop(stopOne, "#006400");
+	myGradient.addColorStop(stopTwo, "#90EE90");
+	context.fillStyle = myGradient;
+	context.fillRect(0, 200, 700, 300);
+	if (stopOne < 1) 
+		stopOne += 0.005;
+	else 
+		stopOne = 0;
+	if (stopTwo <0)
+		stopTwo += 0.005;
+	else 
+		stopTwo = 0;
+	var myGradient2 = context.createLinearGradient(0, 0, 700, 200);
+	myGradient.addColorStop(stopOne, "black");
+	myGradient.addColorStop(stopTwo, "#357EC7");
+	context.fillStyle = myGradient;
+	context.fillRect(0, 0, 700, 200);
+	if (stopOne < 1) 
+		stopOne += 0.005;
+	else 
+		stopOne = 0;
+	if (stopTwo <0)
+		stopTwo += 0.005;
+	else 
+		stopTwo = 0;
+  
+  if (Math.random() < 1 && Math.random() > 0.8)
+  { context.fillStyle="white";
+  }
+  else if (Math.random() < 0.8 && Math.random() > 0.5)
+  { context.fillStyle="red";
+  }
+  else{
+  context.fillStyle="blue"
+  }
+  //image
+  drawImage(x,y);
+  if (px + pdx > width || px + pdx < 0)
+    pdx = -pdx;
+  if (py + pdy > height || py + pdy < 0)
+    pdy = -pdy;
+  px += pdx;
+  py += pdy;
+  
+  drawCircle(100,100,30);
+  
+  
+  //bouncing poopy
+  drawCircle(x, y, 0.1);
+  if (x + dx > width || x + dx < 0)
+    dx = -dx;
+  if (y + dy > height || y + dy < 0)
+    dy = -dy;
+  x += dx;
+  y += dy;
+  
+  //bouncing text
+  drawText(tx);
+  if (tx + dx > 342 || tx + dx < 0)
+    tdx = -tdx;
+  tx += tdx;
+  
+  drawLine(Lx);
+  if (Lx >300)
+    Lx = 1;
+  Lx += Lx;
+  
+  drawTriangle(ty);
+  if (ty>5){
+  ty=3;
+  }
+  ty += tdy
+  
+  
+}
+window.onload = start;
+</script>
+
+  </section>
+</body>
+</html>
