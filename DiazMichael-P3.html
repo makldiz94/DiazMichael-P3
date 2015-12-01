@@ -16,20 +16,26 @@ var canvas,
     y = 300,
     dx = 2,
     dy = 4,
-	tx = 0;
-	tdx = 2.5;
+	tx = 0,
+	tdx = 4,
+	trix = 3	,
+	triy = 3,
+	trisize = 5,
     width = 700,
-    height = 300; 
-	Lx=1;
-	px=20;
-	py=20;
-	pdx=2;
-	pdy=4;
-	var stopOne;
-	var stopTwo;
-	var timer;
-	ty=1;
-	tdy=1;
+    height = 300, 
+	Lx=1,
+	px=20,
+	py=20,
+	pdx=2,
+	pdy=4,
+	tridy = 3,
+	tridx = 3;
+var stopOne;
+var stopTwo;
+var timer;
+var timerTwo;	
+var ty=1;
+var tdy=1;
 
 function drawCircle(x,y,r) {
   context.beginPath();
@@ -59,14 +65,14 @@ function drawRect(x,y,w,h) {
 }
 
 function drawText(tx) {
-  context.font='30px Helvetica';
-  context.strokeText('Welcome To My Animation', tx,250);
-  context.fillStyle = '#00FF00';
-  context.fillText('Welcome To My Animation' , tx,250);
+  context.font='40px Helvetica';
+  context.fillStyle = 'white';
+  context.strokeText('Donald Trump 2016 Simulator', tx,250);
+  context.fillText('Donald Trump 2016 Simulator' , tx,250);
 }
 
 function drawTriangle(ty){
-    context.strokeStyle = "red";
+    context.strokeStyle = "yellow";
     context.beginPath();
     context.lineTo(218+tx, 25+ty);
     context.lineTo(346+ty, 25+ty);
@@ -82,20 +88,40 @@ function drawLine(Lx){
 	context.stroke();
 
 }
+  function Shape(x, y, color) {
+	this.x = x;
+	this.y = y;
+	this.size = Math.random()*20+5;
+	this.dx = Math.random()*4-2;
+	this.dy = Math.random()*4-2;
+	this.color = color;
+	this.shape = possibleShapes[Math.floor(Math.random()*possibleShapes.length)];
+  }
+  function drawTriangle2(trix, triy, trisize) {
+	context.beginPath();
+	context.fillStyle = "yellow";
+	context.moveTo(trix+trisize,triy);
+	context.lineTo(trix,triy);
+	context.lineTo(trix,triy+trisize);
+	context.closePath();
+	context.fill();
+  }
 function start() {
   canvas = document.getElementById("canvas");
   context = canvas.getContext("2d");
+  timerTwo = setInterval(drawTriangle, 200);
 	stopOne = 0;
 	stopTwo = 1;
   return setInterval(draw, 10);
+  
 }
 function draw() {
   context.clearRect(0, 0, width, height);
   context.fillStyle = "black";
   drawRect(0,200, 800, 700);
 	var myGradient = context.createLinearGradient(0, 200, 700, 300);
-	myGradient.addColorStop(stopOne, "#006400");
-	myGradient.addColorStop(stopTwo, "#90EE90");
+	myGradient.addColorStop(stopOne, "red");
+	myGradient.addColorStop(stopTwo, "blue");
 	context.fillStyle = myGradient;
 	context.fillRect(0, 200, 700, 300);
 	if (stopOne < 1) 
@@ -139,7 +165,15 @@ function draw() {
   py += pdy;
   
   drawCircle(100,100,30);
-  
+  for (i=0; i<1000; i++){
+  drawTriangle2(trix, triy, 5);
+  if (trix + tridx > width || trix + tridx < 0)
+	tridx = -tridx;
+  if (triy + tridy > height || triy + tridy < 0)
+	tridy = -tridy;
+	trix += tridx;
+	triy += tridy;
+	}
   
   //bouncing poopy
   drawCircle(x, y, 0.1);
@@ -152,7 +186,7 @@ function draw() {
   
   //bouncing text
   drawText(tx);
-  if (tx + dx > 342 || tx + dx < 0)
+  if (tx + dx > 180 || tx + dx < 0)
     tdx = -tdx;
   tx += tdx;
   
@@ -166,9 +200,8 @@ function draw() {
   ty=3;
   }
   ty += tdy
-  
-  
-}
+
+ }
 window.onload = start;
 </script>
 
