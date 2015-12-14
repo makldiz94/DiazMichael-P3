@@ -1,0 +1,198 @@
+<html>
+<style>
+html, body {
+  width:  100%;
+  height: 100%;
+  margin: 0px;
+}
+img.bg_image{
+height: 10%;
+width: 10%;
+}
+#container{
+float:left;
+width:1000px;
+overflow-y: scroll;
+height: 100px;
+}
+</style>
+<title>Donald Trump Simulator 2015</title>
+<br>
+<h1 align="center" id="flashy" style="background-color: rgb(255,255,255)">
+Donald Trump Simulator 2015</h1>
+<div id="container" style="width: 17%; height:80%; float:right; border: solid 1px">
+<a id="click to reset" href="#" onclick="location.reload()">Click to Clear List</a>
+<p><b>Instructions:<br>1) Hit the Ctrl key and control Donald to spurt some mouth-poopies. Poopy consequences are listed below.</br>
+ 2) Click Donald to make him bounce until he hits a poopy.</b><br><br><span id="print"></span></p> 
+
+
+</div>
+<body onload="styleText(1000)" bgcolor="white">
+<canvas id="canvas" width="window.innerWidth" height="window.innerHeight-500" style="float:left;"></canvas>
+</body>
+<script>
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var raf;
+var running = false;
+ctx.canvas.width = (window.innerWidth*(0.8));
+ctx.canvas.height = window.innerHeight;
+var color = true;
+var heading = null;
+var tx = 20, dx=2, tdx=2.5;
+var imgBg;
+var imgDrops;
+var x = 40;
+var y = 40;
+var px, py, pdx=2, pdy=4;
+
+
+//draw poopies
+function drawImage(px,py,src){
+  drawn_image = new Image();
+  drawn_image.src = 'https://i.imgur.com/wOG4eRL.png';
+  ctx.drawImage(drawn_image,px+50,py+50,200,200);
+}
+
+//trump template
+var trump = {
+  x: 200,
+  y: 200,
+  vx: 5,
+  vy: 1,
+  draw: function() {
+  
+    base_image = new Image();
+	base_image.src = "trump1.png";
+	ctx.drawImage(base_image,this.x,this.y-180,200,200);
+  }
+};
+
+//control flashing of top bar
+function styleText(milliseconds) {
+ window.setInterval("changeColors()", 1000)
+}
+
+//change color of top bar
+function changeColors() {
+ var heading;
+ heading = document.getElementById("flashy")
+ 
+ if(color && heading != null) {
+   heading.style.backgroundColor = "blue"
+   heading.style.color = "white"
+ }else if(heading != null) {
+   heading.style.backgroundColor = "red"
+   heading.style.color = "white"
+ }
+ color = ! color;
+}
+
+
+function background() {
+    var bg_sources = ["https://s-media-cache-ak0.pinimg.com/736x/31/60/a1/3160a18291493ad43e8127a748681c8c.jpg",
+  "http://www.hdwallpapers.in/walls/homefront_us_flag-wide.jpg",
+  "http://www.lyfaces.com/wallpaper/gallery/gallery-for-gt-illuminati-wallpaper-illuminati-wallpaper-tumblr-.jpg",
+  "https://rbripleydotnet.files.wordpress.com/2013/04/baseball-hotdog-and-applepie.jpg"];
+    var bg_images = [];
+	bg_image = new Image();
+	bg_image.width = canvas.width;
+	bg_image.height= canvas.height;
+	bg_image.src = bg_sources[Math.floor((Math.random() * 3)+1)];
+	var bgpat=document.getElementById("bg_image");
+	var pat = ctx.createPattern(bg_image,"repeat");
+	ctx.rect(0,0,canvas.width,canvas.height);
+	ctx.fillStyle=pat;
+	ctx.fill();
+}
+
+
+function clear() {
+  ctx.fillStyle = 'rgba(255,255,255,0.3)';
+  ctx.fillRect(0,0,canvas.width,canvas.height);
+  drawText(tx);
+  if (tx + dx > 630 || tx + dx < 0)
+  tdx = -tdx;
+  tx += tdx;
+}
+
+function drawText(tx) {
+  ctx.font='30px Helvetica';
+  ctx.strokeText('"Money is my way of keeping score"', tx,25);
+  ctx.fillStyle = 'grey	';
+  ctx.fillText('"Money is my way of keeping score"' , tx,25);
+}
+function draw() {
+  clear();
+  trump.draw();
+  trump.x += trump.vx;
+  trump.y += trump.vy;
+
+  if (trump.y + trump.vy > canvas.height || trump.y + trump.vy < 0) {
+    trump.vy = -trump.vy;
+  }
+  if (trump.x + trump.vx > canvas.width || trump.x + trump.vx < 0) {
+    trump.vx = -trump.vx;
+  }
+
+  if (trump.x < canvas.width/4 && trump.y < canvas.width/3){
+  document.getElementById("print").innerHTML += "He touched the poopy!";
+  }
+     drawImage(x,y);
+  if (px + pdx > canvas.width || px + pdx < 0)
+    pdx = -pdx;
+  if (py + pdy > canvas.height || py + pdy < 0)
+    pdy = -pdy;
+  px += pdx;
+  py += pdy;
+  raf = window.requestAnimationFrame(draw);
+	
+}
+
+window.addEventListener("keydown", checkKeyPressed, false);{
+var commentLines = ["*China triples US debt interest rates to show you who's boss<br><br>",
+"*Several muslim countries declare the US a zone of religious intolerance<br><br>", "*Failed assassination attempt on Vice President Dick Cheney<br><br>", 
+"*Gun violence increases by 30%<br><br>", "*Jimmy Fallon makes fun of your haircut on Late Night<br><br>",
+"*Wisconsin becomes a blue state for the first time in over 50 years<br><br>", "*Mexico cuts all diplomatic ties with America<br><br>",
+"*Kim Jong Un invites you to the presidential palace<br><br>"];
+function checkKeyPressed(e){
+if (e.keyCode == "17") {
+ var i = Math.floor((Math.random() * 4)+1);
+ var comment = commentLines[i];
+ document.getElementById("print").innerHTML += comment;
+ drawImage(trump.x-200,trump.y-200);
+ this.ctx.save();
+ clear();
+ 
+ }
+
+}
+}
+var timer3 = setInterval("checkKeyPressed()",5);
+
+canvas.addEventListener('mousemove', function(e){
+  if (!running) {
+    clear();
+    trump.x = e.clientX;
+    trump.y = e.clientY;
+    trump.draw();
+	
+  }
+});
+
+canvas.addEventListener("click",function(e){
+  if (!running) {
+    raf = window.requestAnimationFrame(draw);
+    running = true;
+  }
+
+});
+
+canvas.addEventListener("mouseout",function(e){
+  window.cancelAnimationFrame(raf);
+  running = false;
+});
+
+trump.draw();
+</script>
+</html>
